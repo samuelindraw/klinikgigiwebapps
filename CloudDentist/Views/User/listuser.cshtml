@@ -1,0 +1,46 @@
+﻿@model IEnumerable<CloudDentist.Models.UserModel>
+@{
+    ViewData["Title"] = "listuser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Dynamic Table Full Pagination -->
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">List User <small>Add Role</small></h3>
+    </div>
+    <div class="block-content block-content-full">
+        <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+        <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th class="d-none d-sm-table-cell">Email</th>
+                    <th class="d-none d-sm-table-cell" style="width: 15%;">Manage Role</th>
+                    <th class="text-center" style="width: 15%;">Delete User</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td class="font-w600">@item.Id</td>
+                    <td class="font-w600">@item.Username</td>
+                    <td class="d-none d-sm-table-cell">@item.Email</td>
+                    <td class="text-center">
+                        <a class="btn btn-rounded btn-alt-secondary" href="@Url.Action("ManageRole", "User", new { Username = item.Username })">
+                            <i class="fa fa-user-circle mr-5"></i>Profile
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a onclick="Delete(@item.Username)" class="btn btn-sm btn-secondary m-5"><i class="fa fa-times text-danger mr-5">Delete</i></a>
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+</div>
+<!-- END Dynamic Table Full Pagination -->

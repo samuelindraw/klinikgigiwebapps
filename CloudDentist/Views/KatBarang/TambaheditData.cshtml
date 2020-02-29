@@ -1,0 +1,81 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.KatBarang
+@{
+    ViewData["Title"] = "TambaheditData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Bootstrap Forms Validation -->
+<h2 class="content-heading">Bootstrap Forms</h2>
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Validation</h3>
+        <div class="block-options">
+            <button type="button" class="btn-block-option">
+                <i class="si si-wrench"></i>
+            </button>
+        </div>
+    </div>
+    <div class="block-content">
+        <div class="row justify-content-center py-20">
+            <div class="col-xl-6">
+                <!-- jQuery Validation functionality is initialized in js/pages/be_forms_validation.min.js which was auto compiled from _es6/pages/be_forms_validation.js -->
+                <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                <form asp-action="CreatePost" method="post">
+                    <div class="form-group row">
+                        <label asp-for="NamaKategori" col-lg-4 col-form-label">Nama kategori <span class="text-danger">*</span></label>
+                        <div class="col-lg-8">
+                            <input asp-for="NamaKategori" class="form-control" />
+                            <span asp-validation-for="NamaKategori" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="TenantID">Tenant</label>
+                        <select class="form-control" id="tenantID" name="tenantID">
+                            <option>Select Tenant</option>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8 ml-auto">
+                            <input type="submit" value="Submit" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            var options = {};
+            var obj = {};
+            obj.token = ('@Context.Session.GetString("JWTtoken")');
+            options.data = JSON.stringify(obj);
+            sessionStorage.setItem("token", obj.token);
+            options.url = "http://localhost:30512/api/Tenant";
+            options.type = "GET";
+            options.beforeSend = function (request) {
+            request.setRequestHeader("Authorization",
+            "Bearer " + sessionStorage.getItem("token"));
+            };
+                options.dataType = "json";
+                options.success = function (data) {
+                    data.forEach(function (element) {
+                        $("#tenantID").append("<option value='" + element.tenantID + "'>" + element.tenantName + "</option>");
+                    });
+                };
+                options.error = function () {
+                    $("#msg").html("Error while calling the Web API!");
+
+            };
+
+                $.ajax(options);
+            });
+</script>
+
+<!-- Bootstrap Forms Validation -->
